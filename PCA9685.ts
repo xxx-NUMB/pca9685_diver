@@ -5,6 +5,13 @@ enum Motors {
     M2 = 0x2,
 }
 
+enum Apins {
+    //% block="P1"
+    ser1 = 0x1,
+    //% block="P2"
+    ser2 = 0x2,
+}
+
 enum Servos {
     //% block="Servo1"
     servo1 = 0x6,
@@ -138,15 +145,19 @@ namespace KitiBot {
 	 * Servo Execute
 	 * @param degree [0-180] degree of servo; eg: 0, 90, 180
 	*/
-    //% blockId=kitibot_servo block="Servo degree %degree"
+    //% blockId=kitibot_servo block="Servo |%channel |degree %degree"
     //% weight=85
     //% degree.min=0 degree.max=180
-    export function Servo(degree: number): void {
+    export function Servo(channel: Apins, degree: number): void {
         let v_us = (degree * 1800 / 180 + 600); // 0.6 ~ 2.4
-        pins.servoSetPulse(AnalogPin.P16, v_us);
+        if (channel == 1){
+            pins.servoSetPulse(AnalogPin.P1, v_us);
+        }else if(channel == 2){
+            pins.servoSetPulse(AnalogPin.P2, v_us);
+        }
     }
 
-    	/**
+    /**
 	 * Servo Execute
 	 * @param degree [0-180] degree of servo; eg: 90, 0, 180
 	*/
